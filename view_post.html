@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ post.title }}</h2>
+<p>By {{ author.username }} </p>
+<div>{{ post.content|safe }}</div>
+
+<hr>
+<h3>Comments</h3>
+{% for comment in comments %}
+    <div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
+        <p><strong>{{ comment.user.username }}</strong> commented on {{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+        <p>{{ comment.content }}</p>
+    </div>
+{% else %}
+    <p>No comments yet.</p>
+{% endfor %}
+
+{% if session.get('user_id') %}
+<hr>
+<h4>Add a Comment</h4>
+<form method="POST">
+    <textarea name="content" rows="4" cols="60" required></textarea><br><br>
+    <input type="submit" value="Post Comment">
+</form>
+{% else %}
+    <p><a href="{{ url_for('login') }}">Login</a> to comment.</p>
+{% endif %}
+{% endblock %}

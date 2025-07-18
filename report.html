@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>📊 Analysis Report</h2>
+
+<p>Total Posts: <strong>{{ total_posts }}</strong></p>
+
+<h3>Posts by Category</h3>
+<ul>
+  {% for category, count in category_count.items() %}
+    <li><strong>{{ category }}:</strong> {{ count }}</li>
+  {% endfor %}
+</ul>
+
+<a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+{% endblock %}
