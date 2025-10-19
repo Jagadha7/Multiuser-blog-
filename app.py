@@ -10,10 +10,10 @@ import hashlib
 import os
 
 
+
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-# Database (SQLite in this case)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
@@ -36,10 +36,8 @@ with app.app_context():
 
 @app.route('/', methods=['GET', 'HEAD'])
 def home():
-    # Handle Render health checks (HEAD request)
     if request.method == 'HEAD':
         return '', 200
-
     posts = Post.query.order_by(Post.id.desc()).all()
     return render_template('home.html', posts=posts)
 
@@ -50,17 +48,14 @@ def register():
         username = request.form['username']
         email = request.form['email']
         password = generate_password_hash(request.form['password'])
-
         if User.query.filter_by(email=email).first():
             flash('Email already registered. Please log in.')
             return redirect(url_for('login'))
-
         new_user = User(username=username, email=email, password=password)
         db.session.add(new_user)
         db.session.commit()
         flash('Registration successful. Please login.')
         return redirect(url_for('login'))
-
     return render_template('register.html')
 
 
@@ -178,5 +173,5 @@ def report():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=False)
+    app.run(host='0.0.0.0', port=port, debug=True)
 
