@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="dashboard-card">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="dashboard-header">
+        <img src="https://www.gravatar.com/avatar/{{ user.email|gravatar(150) }}" class="profile-pic" alt="Profile">
+        <div class="user-info">
+            <h2>Welcome, <span>{{ user.username }}</span> 👋</h2>
+            <div class="actions">
+                <a href="{{ url_for('create_post') }}" class="btn">
+                    <i class="fas fa-plus"></i> Add New Post
+                </a>
+                <a href="{{ url_for('report') }}" class="btn secondary">
+                    <i class="fas fa-chart-bar"></i> View Analysis Report
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="user-posts">
+        {% if posts %}
+            <h3>Your Posts:</h3>
+            {% for post in posts %}
+                <div class="post-card">
+                    <a href="{{ url_for('view_post', post_id=post.id) }}" class="post-title">{{ post.title }}</a>
+                    <p>{{ post.content[:150] }}{% if post.content|length > 150 %}...{% endif %}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-posts">You haven’t written any posts yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
